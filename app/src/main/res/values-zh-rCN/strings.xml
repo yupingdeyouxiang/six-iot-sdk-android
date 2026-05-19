@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">six-iot-sdk-android</string>
+    <string name="title_device">设备</string>
+    <string name="title_data">数据</string>
+    <string name="title_user">用户</string>
+    <string name="add_device_desc">添加一个设备</string>
+    <string name="add_device">添加设备</string>
+    <string name="sign_out">退出登录</string>
+    <string name="app_name_short">six-iot-sdk</string>
+    <string name="auth_granted">Authorization granted</string>
+    <string name="intro_header">OpenID AppAuth Demo</string>
+    <string name="openid_logo_content_description">AppAuth Logo</string>
+    <string name="refresh_token">Refresh token</string>
+    <string name="access_token_expires_at">Access token expires at: %s</string>
+    <string name="no_access_token_returned">No access token returned</string>
+    <string name="no_refresh_token_returned">No refresh token returned</string>
+    <string name="refresh_token_returned">Refresh token returned</string>
+    <string name="no_id_token_returned">No ID token returned</string>
+    <string name="id_token_returned">ID token returned</string>
+    <string name="view_profile">View user info</string>
+    <string name="userinfo_profile_content_description">User profile picture</string>
+    <string name="login_hint_value">Account ID (e.g. test@example.com)</string>
+    <string name="account_id_description">The Account ID is optional. If specified, it is transmitted as a login_hint parameter in the authorization request.</string>
+    <string name="auth_options">Authorization options:</string>
+    <string name="browser_selector_label">Use browser:</string>
+    <string name="browser_icon_contentDescription">Browser app icon</string>
+    <string name="browser_appauth_default_label">AppAuth heuristic selection</string>
+    <string name="custom_tab_label">"%1$s (custom tab)"</string>
+    <string name="retry_label">Retry</string>
+    <string name="not_authorized">Not authorized</string>
+    <string name="start_authorization">Start authorization</string>
+    <string name="reauthorize">Reauthorize</string>
+    <string name="no_access_token_expiry">Access time has no defined expiry</string>
+    <string name="access_token_expired">Access token has expired</string>
+    <string name="auth_settings">Authorization settings in use:</string>
+    <string name="use_pending_intents">Use PendingIntent\'s for completion</string>
+    <string name="unbind_device">解绑设备</string>
+    <string name="unbind_device_confirm_title">确认解绑</string>
+    <string name="unbind_device_confirm_message">您确定要解绑此设备吗？此操作无法撤销。</string>
+    <string name="unbind_device_success">设备解绑成功</string>
+    <string name="unbind_device_failure">解绑设备失败</string>
+    <string name="authentication_token_not_found">未找到身份验证令牌。</string>
+    <string name="device_guid_not_found">未找到设备 GUID。</string>
+    <string name="ai_assistant_title">AI 助手</string>
+
+    <!-- AI Chat strings -->
+    <string name="ai_chat_input_hint">有问题问 AI...</string>
+    <string name="ai_chat_hold_to_talk">按住 说话</string>
+    <string name="ai_chat_swipe_up_to_cancel">上滑取消</string>
+    <string name="ai_chat_release_to_send">松开发送</string>
+    <string name="ai_chat_release_to_cancel">松开取消</string>
+    <string name="ai_chat_move_back_to_continue">移回继续</string>
+    <string name="ai_chat_switch_mode">切换输入模式</string>
+    <string name="ai_chat_send_message">发送消息</string>
+    <string name="title_activity_login">注册/登录</string>
+</resources>

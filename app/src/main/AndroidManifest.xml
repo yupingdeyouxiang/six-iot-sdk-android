@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.SixIotSdkSample"
+        tools:replace="android:theme,android:fullBackupContent,android:allowBackup,android:dataExtractionRules"
+        tools:targetApi="31">
+
+        <!-- Main App Activities -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.App.AuthInstant">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ui.ai.AiChatActivity" />
+
+        <!-- Custom Flutter Host Activity -->
+        <activity
+            android:name=".ui.panels.DevicePanelActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Services -->
+        <service android:name=".services.MqttClientService" />
+        <service android:name="org.eclipse.paho.android.service.MqttService" />
+
+        <!-- Activities from other libraries -->
+        <activity
+            android:name="com.espressif.ui.activities.EspMainActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:theme="@style/Theme.EspProvisioning" />
+
+        <activity android:name="com.espressif.ui.activities.ProvisionActivity" />
+        <activity android:name="com.espressif.ui.activities.AddDeviceActivity" />
+        <activity android:name="com.espressif.ui.activities.BLEProvisionLanding" />
+        <activity android:name="com.espressif.ui.activities.ProvisionLanding" />
+        <activity android:name="com.espressif.ui.activities.WiFiScanActivity" />
+        <activity
+            android:name="com.espressif.ui.activities.SettingsActivity"
+            android:label="@string/title_activity_settings" />
+
+        <!--use below in case want to use WebView to host the auth page-->
+        <activity
+            android:name="com.six.iot.ui.auth.webview.WebViewAuthActivity"
+            android:exported="true"
+            android:theme="@style/Theme.SixIotSdkSample">
+            <!--<intent-filter android:autoVerify="true"
+                tools:ignore="AppLinkUrlError">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:path="/oauth2redirect"
+                    android:scheme="com.six.iot"
+                    tools:ignore="AppLinkUrlError" />
+            </intent-filter>-->
+        </activity>
+
+        <activity
+            android:name="net.openid.appauth.RedirectUriReceiverActivity"
+            tools:node="remove" />
+
+        <!--use below in case want to use Browser Custom Tab to host the auth page-->
+        <!--<activity
+            android:name="net.openid.appauth.RedirectUriReceiverActivity"
+            android:exported="true"
+            tools:node="replace">
+            <intent-filter tools:ignore="AppLinkUrlError">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="com.six.iot" android:path="/oauth2redirect" tools:ignore="AppLinkUrlError"/>
+            </intent-filter>
+        </activity>-->
+    </application>
+
+</manifest>

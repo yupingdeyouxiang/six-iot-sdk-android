@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="app_toolbar_height">48dp</dimen>
+    <dimen name="toolbar_title_text_size">18sp</dimen>
+    <dimen name="primary_button_height">48dp</dimen>
+</resources>

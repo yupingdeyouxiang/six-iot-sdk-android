@@ -1,0 +1,161 @@
+<resources>
+
+    <string name="app_name">ESP 配网</string>
+    <string name="app_name_ble">ESP 蓝牙配网</string>
+    <string name="app_name_softap">ESP SoftAP 配网</string>
+
+    <!-- Screen Titles -->
+    <string name="title_activity_connect_device">连接到设备</string>
+    <string name="title_activity_pop">所有权证明</string>
+    <string name="title_activity_wifi_scan_list">选择 Wi-Fi 网络</string>
+    <string name="title_activity_wifi_config">Wi-Fi 配置</string>
+    <string name="title_activity_thread_config">Thread 网络配置</string>
+    <string name="title_activity_provisioning">配网</string>
+    <string name="title_activity_settings">设置</string>
+    <string name="title_activity_add_device">添加设备</string>
+    <string name="title_provision_device">配网</string>
+
+    <!-- Button Text -->
+    <string name="btn_ok">确定</string>
+    <string name="btn_cancel">取消</string>
+    <string name="btn_next">下一步</string>
+    <string name="btn_back">上一步</string>
+    <string name="btn_provision">配网</string>
+    <string name="btn_scan_qr_code">扫描二维码</string>
+    <string name="btn_provision_device">配网新设备</string>
+    <string name="btn_connect">连接</string>
+    <string name="btn_connecting">连接中&#8230;</string>
+    <string name="btn_wifi_settings">前往 Wi-Fi 设置</string>
+    <string name="btn_scan_again">再次扫描</string>
+    <string name="btn_no_qr_code">我没有二维码</string>
+    <string name="btn_save">保存</string>
+    <string name="btn_change_prefix">更改</string>
+    <string name="btn_yes">是</string>
+    <string name="btn_get_permission">获取权限</string>
+    <string name="btn_try_again">重试</string>
+
+    <!-- Hint Text -->
+    <string name="hint_pop">所有权证明</string>
+    <string name="hint_ssid">网络名称</string>
+    <string name="hint_value">输入值</string>
+    <string name="hint_password">密码</string>
+
+    <!-- Instruction Strings -->
+    <string name="pop_instruction">输入您的所有权证明 PIN</string>
+    <string name="setup_instructions">要完成设备 %1$s 的设置，请提供您的家庭网络凭据。</string>
+    <string name="connect_device_instruction_general">要为您的设备配网，请确保设备已开启。将您的手机连接到名称类似于 PROV_XXXXXX 的 Wi-Fi 网络</string>
+    <string name="connect_device_instruction_specific">要为您的设备配网，请确保设备已开启。将您的手机连接到名称为</string>
+
+    <!-- Provisioning Steps Strings -->
+    <string name="prov_step_0">获取设备绑定安全码</string>
+    <string name="prov_step_1">发送 Wi-Fi 凭据</string>
+    <string name="prov_step_2">应用 Wi-Fi 连接</string>
+    <string name="prov_step_3">检查配网状态</string>
+    <string name="prov_step_4">绑定设备到账号</string>
+    <string name="error_already_bound">设备已被其他用户绑定。</string>
+    <string name="error_session_creation">创建会话失败</string>
+    <string name="error_prov_step_1">发送 Wi-Fi 凭据失败</string>
+    <string name="error_prov_step_2">应用 Wi-Fi 凭据失败</string>
+    <string name="error_prov_step_3">设备配网失败</string>
+    <string name="error_prov_thread_step_1">发送 Thread 凭据失败</string>
+    <string name="error_prov_thread_step_2">应用 Thread 凭据失败</string>
+    <string name="error_binding_failed_with_status">将设备与帐户绑定失败，状态: %1$s</string>
+    <string name="error_binding_failed">将设备与帐户绑定失败</string>
+    <string name="error_challenge_response_failed">从设备获取挑战响应失败</string>
+    <string name="error_token_not_found">未找到身份验证令牌。</string>
+
+    <string name="action_settings">设置</string>
+    <string name="title_activity_provision_landing">连接到设备</string>
+    <string name="connected_to_device_instructions">您现在已连接到设备。要为设备配网，请在下一页输入您的网络凭据。</string>
+    <string name="no_internet_note">为确保您真正连接到设备，请务必接受系统对话框，该对话框会通知您网络无法访问互联网。</string>
+    <string name="connect_to_device_action">连接</string>
+    <string name="connected_to_device_action">配网网络</string>
+    <string name="title_activity_provision_instructions">配网说明</string>
+    <string name="ssid_hint_text">网络名称</string>
+    <string name="password_hint_text">密码</string>
+    <string name="provision">配网</string>
+
+    <string name="success_text">设备已成功配网！</string>
+    <string name="wifi_disconnected_text">请检查设备指示灯以了解配网状态。</string>
+    <string name="done">完成</string>
+
+    <string name="enable_bluetooth_instructions">要为您的新设备配网，请确保您手机的蓝牙已开启并且在新设备的可及范围内。</string>
+    <string name="enabled_bluetooth_instructions">要为设备配网，请在下一页输入您的网络凭据。</string>
+    <string name="enable_bluetooth_action">启用</string>
+    <string name="enabled_bluetooth_action">配网网络</string>
+
+    <!-- Strings used for Progress -->
+    <string name="progress_scanning">正在扫描设备...</string>
+    <string name="progress_get_status">正在获取状态</string>
+    <string name="progress_loading">加载中...</string>
+    <string name="progress_thread_networks">正在搜索\nThread 网络...</string>
+
+    <!--Error Messages-->
+    <string name="error_title">错误！</string>
+    <string name="error_ble_not_supported">抱歉！不支持 BLE。</string>
+    <string name="error_bluetooth_not_supported">抱歉！不支持蓝牙。</string>
+    <string name="error_device_not_supported">通信失败。可能不支持该设备。</string>
+    <string name="error_device_transport_not_supported">可能不支持该设备。</string>
+    <string name="error_network_not_found">未找到网络。</string>
+    <string name="error_authentication_failed">Wi-Fi 身份验证失败。</string>
+    <string name="error_unknown">设备配网失败。原因：未知。</string>
+    <string name="error_pop_incorrect">请使用正确的所有权证明 PIN 重试。</string>
+    <string name="error_no_ble_device">未找到蓝牙设备！</string>
+    <string name="error_device_connect_failed">连接设备失败。</string>
+    <string name="error_ssid_empty">网络名称不能为空</string>
+    <string name="error_password_empty">密码不能为空</string>
+    <string name="error_provisioning">将您的开发板恢复出厂设置并重试</string>
+    <string name="error_wifi_off">请打开 Wi-Fi 以连接设备。</string>
+    <string name="error_security_mismatch">用于与设备通信的安全设置与配置不匹配</string>
+    <string name="error_camera_permission">未授予相机权限。应用将无法扫描二维码添加设备。</string>
+    <string name="error_location_permission">未授予位置权限。添加 BLE 或 SoftAP 设备需要此权限。</string>
+    <string name="error_no_preferred_creds">未添加 Thread 网络</string>
+    <string name="error_read_preferred_creds_request_denied">您已拒绝读取 Thread 凭据的请求</string>
+    <string name="error_no_thread_network">无活动的 Thread 边界路由器</string>
+    <string name="error_dataset_invalid">数据集无效</string>
+    <string name="error_nearby_devices_permission">未授予“附近设备”权限。扫描和连接 BLE 设备需要此权限。</string>
+
+    <string name="prefix">前缀：</string>
+    <string name="hint_prefix">输入前缀</string>
+    <string name="hint_key">输入 PIN</string>
+    <string name="devices_title">设备</string>
+    <string name="enter_device_key">输入您的所有权证明 PIN</string>
+    <string name="app_version">应用版本</string>
+    <string name="powered_by_esp">由 ESPRESSIF 提供技术支持</string>
+
+    <string name="join_other_network">加入其他网络</string>
+    <string name="networks">网络</string>
+    <string name="connect_your_device">连接到您的设备</string>
+
+    <string name="dialog_msg_gps">定位服务已禁用。请启用以继续</string>
+    <string name="dialog_msg_device_selection">选择设备类型</string>
+    <string name="looking_for_qr_code">正在查找二维码</string>
+    <string name="position_camera_for_qr_code">请将摄像头对准二维码。</string>
+    <string name="dialog_title_network_info">输入网络信息</string>
+    <string name="dialog_msg_ble_device_disconnection">设备已断开连接</string>
+
+    <!-- Preference Titles -->
+    <string name="device_settings">设置</string>
+
+    <!-- Messages Preferences -->
+    <string name="device_selection_title">支持的设备类型</string>
+    <string name="security_selection_title">加密通信</string>
+    <string name="username_wifi_pref_title">用于 Wi-Fi 的 Sec2 用户名</string>
+    <string name="username_thread_pref_title">用于 Thread 的 Sec2 用户名</string>
+    <string name="username_selection_title">用户名</string>
+    <string name="summary_secured">安全</string>
+    <string name="summary_unsecured">不安全</string>
+    <string name="summary_username">（适用于安全版本 2）</string>
+
+    <!--Dialog texts-->
+    <string name="dialog_title_camera_permission">需要相机权限</string>
+    <string name="dialog_msg_camera_permission_use">此应用需要访问您的相机以扫描二维码。</string>
+    <string name="dialog_title_location_permission">需要位置权限</string>
+    <string name="dialog_msg_location_permission_use">连接附近的蓝牙设备需要此权限。</string>
+    <string name="dialog_title_nearby_devices_permission">附近设备权限</string>
+    <string name="dialog_msg_nearby_devices_permission_use">扫描和连接 BLE 设备需要“附近设备”权限。请在“设置”中授予此权限。</string>
+
+    <string name="matter_supported">支持 Matter</string>
+    <string name="fancy_tip_provision_recommendation">请使用二维码为设备配网，如果没有二维码，您可以相应地调整连接设置。</string>
+
+</resources>

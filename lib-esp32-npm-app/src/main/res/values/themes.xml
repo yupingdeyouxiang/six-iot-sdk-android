@@ -1,0 +1,11 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.EspProvisioning" parent="Theme.Material3.Light.NoActionBar">
+        <!-- System Bar Colors -->
+        <item name="android:statusBarColor">@color/toolbar_background_color</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="Theme.EspProvisioning" parent="Base.Theme.EspProvisioning" />
+
+</resources>

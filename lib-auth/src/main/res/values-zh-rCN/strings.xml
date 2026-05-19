@@ -1,0 +1,53 @@
+<resources>
+
+    <string name="title_home">首页</string>
+    <string name="title_data">数据</string>
+    <string name="title_my">我的</string>
+    <string name="add_device_desc">添加设备</string>
+    <string name="retry_label">重试</string>
+
+    <!-- Authentication State Messages -->
+    <string name="auth_granted">已获得授权</string>
+    <string name="not_authorized">未授权</string>
+    <!-- User Profile Messages -->
+    <string name="view_profile">查看用户信息</string>
+    <string name="userinfo_profile_content_description">用户头像</string>
+    <!-- Session and Token Management -->
+    <string name="sign_out">退出登录</string>
+    <string name="refresh_token">刷新令牌</string>
+    <string name="access_token_expires_at">访问令牌过期时间: %s</string>
+    <string name="no_access_token_returned">未返回访问令牌</string>
+    <string name="no_refresh_token_returned">未返回刷新令牌</string>
+    <string name="refresh_token_returned">已返回刷新令牌</string>
+    <string name="no_id_token_returned">未返回 ID 令牌</string>
+    <string name="id_token_returned">已返回 ID 令牌</string>
+    <string name="no_access_token_expiry">访问时间未定义有效期</string>
+    <string name="access_token_expired">访问令牌已过期</string>
+
+    <!-- Authorization Details and Demo -->
+    <string name="intro_header">OpenID AppAuth 演示</string>
+    <string name="openid_logo_content_description">AppAuth 图标</string>
+    <string name="login_hint_value">账号 ID (例如 test@example.com)</string>
+    <string name="account_id_description">账号 ID 是可选的。如果指定，它将作为 login_hint 参数在授权请求中传输。</string>
+    <string name="auth_options">授权选项：</string>
+    <string name="browser_selector_label">使用浏览器：</string>
+    <string name="browser_icon_contentDescription">浏览器应用图标</string>
+    <string name="browser_appauth_default_label">AppAuth 启发式选择</string>
+    <string name="custom_tab_label">"%1$s (自定义标签页)"</string>
+    <string name="start_authorization">开始授权</string>
+    <string name="reauthorize">重新授权</string>
+    <string name="auth_settings">正在使用的授权设置：</string>
+    <string name="use_pending_intents">使用 PendingIntent 完成请求</string>
+
+    <string name="auth_msg_cancelled">登录已取消</string>
+    <string name="auth_msg_failed">身份验证失败: %s</string>
+    <string name="auth_msg_not_finished">登录尚未完成</string>
+    <string name="auth_msg_success">登录成功</string>
+
+    <!-- User Profile Messages -->
+    <string name="auth_msg_openid_success">用户身份已验证</string>
+    <string name="auth_msg_openid_fail">获取用户身份失败</string>
+
+    <!-- Session Messages -->
+    <string name="auth_msg_signed_out">已成功退出登录</string>
+</resources>
