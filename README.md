@@ -37,7 +37,7 @@ This SDK demonstrates how to quickly integrate sophisticated identity authentica
 > We highly recommend reviewing the [Quick Start Documentation](https://doc.iot.shuhenglianchang.com/quick-start/quick-start) before proceeding with mobile application integration.
 
 ### 1. Download the Companion UI Project
-Clone or download the UI dependency workspace from [GitHub: six_iot_flutter](https://github.com/Simple-intelligent-X/six_iot_flutter). This Flutter project is used to render device-specific interfaces and will be imported directly into the `six-iot-sdk-android` ecosystem.
+Clone or download the UI dependency workspace from [six_iot_flutter](https://github.com/Simple-intelligent-X/six_iot_flutter). This Flutter project is used to render device-specific interfaces and will be imported directly into the `six-iot-sdk-android` ecosystem.
 
 ### 2. Configure IDp and IoT Platform Credentials
 Update your tenant parameters inside your local code files to match your deployment environment.
@@ -45,7 +45,7 @@ Update your tenant parameters inside your local code files to match your deploym
 First, configure your endpoint fields inside `app/build.gradle.kts` (modify these values to your specific parameters, especially if you are utilizing a dedicated AWS IoT Core tenant for a federated product infrastructure):
 
 ```kotlin
-        buildConfigField("String", "MQTT_BROKER_URL", "\"wss://shuhenglianchang.com:30084/mqtt\"")
+buildConfigField("String", "MQTT_BROKER_URL", "\"wss://shuhenglianchang.com:30084/mqtt\"")
 //buildConfigField("String", "MQTT_BROKER_URL", "\"wss://a2o5o645mb29bc-ats.iot.ap-southeast-1.amazonaws.com/mqtt\"")
 buildConfigField("String", "AWS_IOT_CUSTOM_AUTHZ_USERNAME", "\"username?x-amz-customauthorizer-name=six-iot-authorizer\"")
 buildConfigField("String", "USER_INFO_URL", "\"https://iam.shuhenglianchang.com/userinfo\"")
@@ -60,11 +60,11 @@ Next, update your Identity Provider (IdP) endpoints in `lib-auth/src/main/res/ra
   "redirect_uri": "com.six.iot:/oauth2redirect",
   "end_session_redirect_uri": "com.six.iot:/oauth2redirect",
   "authorization_scope": "openid profile",
-  "authorization_endpoint_uri": "[https://abc123.app.shuhenglianchang.com/oauth2/authorize](https://abc123.app.shuhenglianchang.com/oauth2/authorize)",
-  "token_endpoint_uri": "[https://abc123.app.shuhenglianchang.com/oauth2/token](https://abc123.app.shuhenglianchang.com/oauth2/token)",
-  "registration_endpoint_uri": "[https://abc123.app.shuhenglianchang.com/oauth2/authorize](https://abc123.app.shuhenglianchang.com/oauth2/authorize)",
-  "end_session_endpoint": "[https://abc123.app.shuhenglianchang.com/connect/logout](https://abc123.app.shuhenglianchang.com/connect/logout)",
-  "user_info_endpoint_uri": "[https://abc123.app.shuhenglianchang.com/userinfo](https://abc123.app.shuhenglianchang.com/userinfo)",
+  "authorization_endpoint_uri": "https://abc123.app.shuhenglianchang.com/oauth2/authorize",
+  "token_endpoint_uri": "https://abc123.app.shuhenglianchang.com/oauth2/token",
+  "registration_endpoint_uri": "https://abc123.app.shuhenglianchang.com/oauth2/authorize",
+  "end_session_endpoint": "https://abc123.app.shuhenglianchang.com/connect/logout",
+  "user_info_endpoint_uri": "https://abc123.app.shuhenglianchang.com/userinfo",
   "https_required": true
 }
 ```
