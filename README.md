@@ -1,3 +1,7 @@
+https://github.com/user-attachments/assets/86b1b179-2029-4548-bffd-c69d8c5e0242
+
+https://github.com/user-attachments/assets/2482e68e-8d01-4a64-9038-46e0aa84f2d8
+
 > [!TIP]
 > This SDK works seamlessly alongside the [six-iot-sdk-esp32](https://github.com/Simple-intelligent-X/six-iot-sdk-esp32) firmware repository.
 
