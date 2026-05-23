@@ -1,5 +1,6 @@
 package com.six.iot.ui.auth.webview
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -14,11 +15,17 @@ import androidx.appcompat.content.res.AppCompatResources
 import com.six.iam.handler.webview.OAuthHandler
 import com.six.iot.R
 import com.six.iot.databinding.ActivityWebViewAuthBinding
+import com.six.iot.wxapi.WeChatWebBridge
 
 class WebViewAuthActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityWebViewAuthBinding
     private var redirectUri: String = ""
+
+    companion object {
+        @SuppressLint("StaticFieldLeak") // Safe because we clear it in onDestroy
+        var currentWebView: WebView? = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,12 +71,17 @@ class WebViewAuthActivity : AppCompatActivity() {
                 useWideViewPort = true
                 allowFileAccess = false
             }
+            addJavascriptInterface(WeChatWebBridge(this@WebViewAuthActivity), "AndroidWeChatBridge")
             webViewClient = AuthWebViewClient()
             loadUrl(url)
         }
+        currentWebView = binding.webView
     }
 
     override fun onDestroy() {
+        if (currentWebView == binding.webView) {
+            currentWebView = null
+        }
         binding.webView.destroy()
         super.onDestroy()
     }

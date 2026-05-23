@@ -27,6 +27,7 @@ android {
         buildConfigField("String", "USER_INFO_URL", "\"https://iam.shuhenglianchang.com/userinfo\"")
         buildConfigField("String", "USER_DEVICES_URL", "\"https://mgt.iot.shuhenglianchang.com/iot/device/user/devices?search=&pageCurrentIndex=1\"")
 
+        buildConfigField("String", "WECHAT_LOGIN_APPID", "\"wx7f61123c6f571dd2\"")
 //        missingDimensionStrategy("authMethod", "webview")
     }
 
@@ -108,6 +109,7 @@ dependencies {
     implementation(libs.androidx.tools.core)
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.eventbus)
+    implementation(libs.tencent.wechat.sdk)
 
 //    implementation(libs.androidx.activity)
 //    implementation(libs.androidx.activity.ktx)

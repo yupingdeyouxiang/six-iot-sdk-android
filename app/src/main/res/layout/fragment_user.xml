@@ -44,7 +44,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Please log in to manage your profile."
+                    android:text="@string/user_login_prompt"
                     android:textAppearance="?attr/textAppearanceBody1" />
 
                 <com.google.android.material.button.MaterialButton
@@ -52,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:text="Login / Register" />
+                    android:text="@string/user_login_btn" />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -87,7 +87,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="User ID (sub)"
+                    android:text="@string/user_id_sub"
                     android:textAppearance="?attr/textAppearanceCaption" />
 
                 <TextView

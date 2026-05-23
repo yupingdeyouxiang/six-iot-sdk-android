@@ -3,11 +3,11 @@
   "redirect_uri": "com.six.iot:/oauth2redirect",
   "end_session_redirect_uri": "com.six.iot:/oauth2redirect",
   "authorization_scope": "openid profile",
-  "authorization_endpoint_uri": "https://abc123.app.shuhenglianchang.com/oauth2/authorize",
-  "token_endpoint_uri": "https://abc123.app.shuhenglianchang.com/oauth2/token",
-  "registration_endpoint_uri": "https://abc123.app.shuhenglianchang.com/oauth2/authorize",
-  "end_session_endpoint": "https://abc123.app.shuhenglianchang.com/connect/logout",
-  "user_info_endpoint_uri": "https://abc123.app.shuhenglianchang.com/userinfo",
+  "authorization_endpoint_uri": "https://08d7db.app.shuhenglianchang.com/oauth2/authorize",
+  "token_endpoint_uri": "https://08d7db.app.shuhenglianchang.com/oauth2/token",
+  "registration_endpoint_uri": "https://08d7db.app.shuhenglianchang.com/oauth2/authorize",
+  "end_session_endpoint": "https://08d7db.app.shuhenglianchang.com/connect/logout",
+  "user_info_endpoint_uri": "https://08d7db.app.shuhenglianchang.com/userinfo",
   "https_required": true
 }
 

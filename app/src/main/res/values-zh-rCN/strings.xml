@@ -34,6 +34,10 @@
     <string name="access_token_expired">Access token has expired</string>
     <string name="auth_settings">Authorization settings in use:</string>
     <string name="use_pending_intents">Use PendingIntent\'s for completion</string>
+    <string name="action_location">位置</string>
+    <string name="user_id_sub">用户(sub)</string>
+    <string name="user_login_prompt">请登录使用应用</string>
+    <string name="user_login_btn">登录/注册</string>
     <string name="unbind_device">解绑设备</string>
     <string name="unbind_device_confirm_title">确认解绑</string>
     <string name="unbind_device_confirm_message">您确定要解绑此设备吗？此操作无法撤销。</string>
