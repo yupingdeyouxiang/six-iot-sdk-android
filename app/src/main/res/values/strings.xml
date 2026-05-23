@@ -35,6 +35,9 @@
     <string name="auth_settings">Authorization settings in use:</string>
     <string name="use_pending_intents">Use PendingIntent\'s for completion</string>
     <string name="action_location">Location</string>
+    <string name="user_id_sub">User ID(sub)</string>
+    <string name="user_login_prompt">Please login to use App</string>
+    <string name="user_login_btn">Login/Register</string>
     <string name="unbind_device">Unbind Device</string>
     <string name="unbind_device_confirm_title">Confirm Unbind</string>
     <string name="unbind_device_confirm_message">Are you sure you want to unbind this device? This action cannot be undone.</string>

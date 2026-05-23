@@ -51,6 +51,7 @@ tinkAndroid = "1.19.0"
 toolsCore = "1.0.0-alpha13"
 protobuf = "0.9.4"
 lifecycleCommonJava8 = "2.8.2"
+wechatSdk = "6.8.34"
 
 [libraries]
 androidx-activity = { module = "androidx.activity:activity", version.ref = "activityCompose" }
@@ -118,6 +119,7 @@ androidx-navigation-fragment = { group = "androidx.navigation", name = "navigati
 tink-android = { module = "com.google.crypto.tink:tink-android", version.ref = "tinkAndroid" }
 androidx-tools-core = { group = "androidx.privacysandbox.tools", name = "tools-core", version.ref = "toolsCore" }
 androidx-lifecycle-common-java8 = { group = "androidx.lifecycle", name = "lifecycle-common-java8", version.ref = "lifecycleCommonJava8" }
+tencent-wechat-sdk = { group = "com.tencent.mm.opensdk", name = "wechat-sdk-android", version.ref = "wechatSdk" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
