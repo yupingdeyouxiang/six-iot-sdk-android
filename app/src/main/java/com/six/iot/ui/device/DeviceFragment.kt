@@ -34,6 +34,7 @@ import com.six.iot.databinding.FragmentDeviceBinding
 import com.six.iot.events.AuthnFailEvent
 import com.six.iot.events.MqttConnectedEvent
 import com.six.iot.events.ShadowGetAcceptedEvent
+import com.six.iot.events.ShadowUpdateAcceptedEvent
 import com.six.iot.events.StartMqttServiceEvent
 import com.six.iot.services.MqttClientService
 import com.squareup.picasso.Callback
@@ -276,6 +277,23 @@ class DeviceFragment : Fragment(), DeviceHandlerHook {
         activity?.runOnUiThread {
             binding.swipeRefreshLayout.isRefreshing = false
             Toast.makeText(context, "Can't get devices", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onShadowUpdateAcceptedEvent(event: ShadowUpdateAcceptedEvent) {
+        if (_binding == null) return
+        val guid = event.deviceGuid
+        val shadow = event.json?.toMap()
+        val reported = (shadow?.get("state") as? Map<*, *>)?.get("reported") as? Map<*, *>
+        if (reported?.containsKey("status") == true) {
+            val newStatus = reported["status"]?.toString() ?: "Offline"
+            val updatedIndex = deviceAdapter.updateDeviceState(guid, newStatus, shadow)
+            if (updatedIndex != -1) {
+                val viewHolder = binding.deviceRecyclerView.findViewHolderForAdapterPosition(updatedIndex) as? DeviceAdapter.DeviceViewHolder
+                viewHolder?.bindProductSpecificUI(deviceAdapter.devices[updatedIndex])
+                viewHolder?.updateStatusIcon(newStatus)
+            }
         }
     }
 
