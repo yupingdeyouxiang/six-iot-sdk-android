@@ -415,6 +415,13 @@ class DevicePanelActivity : AppCompatActivity() {
                 val json = event.json
                 val stateObject = json?.optJSONObject("state")
                 val reportedObject = stateObject?.optJSONObject("reported")
+
+                val status = reportedObject?.optString("status")
+                if (status.equals("Offline", ignoreCase = true)) {
+                    // Replace 'context' with your actual Context variable if this isn't in an Activity/Fragment
+                    Toast.makeText(this@DevicePanelActivity, "Device is offline", Toast.LENGTH_SHORT).show()
+                }
+
                 val onValue = if (reportedObject?.optString("light") == "on") 1 else 0
                 val isOn = onValue == 1
                 channel.invokeMethod("updateLightState", mapOf("isOn" to isOn))
@@ -427,10 +434,30 @@ class DevicePanelActivity : AppCompatActivity() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onShadowUpdateAcceptedEvent(event: ShadowUpdateAcceptedEvent) {
         if (event.deviceGuid == deviceGuid) {
-            handler.post({
+            try {
+                val json = event.json
+                val stateObject = json?.optJSONObject("state")
+                val reportedObject = stateObject?.optJSONObject("reported")
+
+                // 1. Check if the device status is Offline and show a Toast
+                val status = reportedObject?.optString("status")
+                if (status.equals("Offline", ignoreCase = true)) {
+                    // Replace 'context' with your actual Context variable if this isn't in an Activity/Fragment
+                    Toast.makeText(this@DevicePanelActivity, "Device is offline", Toast.LENGTH_SHORT).show()
+                }
+
+                // 2. Existing logic for light state
+                val onValue = if (reportedObject?.optString("light") == "on") 1 else 0
+                val isOn = onValue == 1
+                channel.invokeMethod("updateLightState", mapOf("isOn" to isOn))
+
+            } catch (e: Exception) {
+                Log.e(TAG, "Error parsing shadow data in onShadowRead", e)
+            }
+            /*handler.post({
                 publish( "$productId/$deviceGuid/shadow/get", "{}")
                 processPublishQueue()
-            })
+            })*/
         }
     }
 }
