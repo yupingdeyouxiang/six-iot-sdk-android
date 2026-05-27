@@ -43,6 +43,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.json.JSONObject
+import com.espressif.ui.activities.EspMainActivity
 
 class DeviceFragment : Fragment(), DeviceHandlerHook {
     companion object {
@@ -58,6 +59,8 @@ class DeviceFragment : Fragment(), DeviceHandlerHook {
     private var isMqttServiceBound = false
     private var pendingMqttEvent: StartMqttServiceEvent? = null
     private var isLoadingDevices = false
+
+    private val loadDevicesRunnable = Runnable { loadDevices() }
 
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -79,8 +82,6 @@ class DeviceFragment : Fragment(), DeviceHandlerHook {
         }
     }
 
-    private val loadDevicesRunnable = Runnable { loadDevices() }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -93,6 +94,9 @@ class DeviceFragment : Fragment(), DeviceHandlerHook {
     ): View {
         _binding = FragmentDeviceBinding.inflate(inflater, container, false)
 
+        deviceUtil = DeviceUtil()
+        userUtil = UserUtil()
+
         deviceAdapter = DeviceAdapter(requireContext()) { device ->
             val intent = DeviceRender.getDevicePanelIntent(requireContext(), device)
             if (intent != null) {
@@ -100,14 +104,13 @@ class DeviceFragment : Fragment(), DeviceHandlerHook {
             }
         }
         binding.deviceRecyclerView.adapter = deviceAdapter
-        deviceUtil = DeviceUtil()
-        userUtil = UserUtil()
+
         binding.swipeRefreshLayout.setOnRefreshListener { loadDevices() }
 
         binding.addDeviceBtn.setOnClickListener {
             val context = requireContext()
             if (AuthManager.authenticated(context)) {
-                val intent = Intent(context, com.espressif.ui.activities.EspMainActivity::class.java).apply {
+                val intent = Intent(context, EspMainActivity::class.java).apply {
                     putExtra(BlufiConstants.KEY_USER_OPEN_ID, userUtil.readUserOpenId(requireActivity()))
                 }
                 startActivity(intent)
@@ -147,10 +150,11 @@ class DeviceFragment : Fragment(), DeviceHandlerHook {
 
     override fun onResume() {
         super.onResume()
-        view?.postDelayed(loadDevicesRunnable, 200)
         if (!AuthManager.authenticated(requireContext())) {
             (activity as? MainActivity)?.startAuth()
+            return
         }
+        view?.postDelayed(loadDevicesRunnable, 200)
     }
 
     override fun onPause() {
@@ -169,19 +173,20 @@ class DeviceFragment : Fragment(), DeviceHandlerHook {
             EventBus.getDefault().post(AuthnFailEvent("User not authenticated"))
             return
         }
-
+        pendingMqttEvent = event
         if (!isMqttServiceBound) {
-            pendingMqttEvent = event
             val intent = Intent(this.context, MqttClientService::class.java)
             requireContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+            return
         }
         processMqttConnections(event)
     }
 
+    //When the MQTT connection is established, subscribe to the topics
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMqttConnectedEvent(event: MqttConnectedEvent) {
-        if (deviceAdapter.getSubTopics().isNotEmpty()) {
-            mqttService?.subscribeToTopics(event.url, deviceAdapter.getSubTopics())
+        deviceAdapter.getSubTopics().forEach { topic ->
+            mqttService?.subscribe(event.url, topic)
         }
         deviceAdapter.getPubTopics().forEach { topic ->
             mqttService?.publish(event.url, topic, "{}")
@@ -191,8 +196,8 @@ class DeviceFragment : Fragment(), DeviceHandlerHook {
     private fun loadDevices() {
         if (isLoadingDevices || _binding == null || context == null) return
         if (!AuthManager.authenticated(requireContext())) {
-            EventBus.getDefault().post(AuthnFailEvent("User not authenticated"))
             binding.swipeRefreshLayout.isRefreshing = false
+            EventBus.getDefault().post(AuthnFailEvent("User not authenticated"))
             return
         }
         binding.swipeRefreshLayout.isRefreshing = true
@@ -201,8 +206,8 @@ class DeviceFragment : Fragment(), DeviceHandlerHook {
             isLoadingDevices = true
             deviceUtil.getUserDevices(token, this)
         } else {
-            EventBus.getDefault().post(AuthnFailEvent("User not authenticated"))
             binding.swipeRefreshLayout.isRefreshing = false
+            EventBus.getDefault().post(AuthnFailEvent("User not authenticated"))
         }
     }
 
@@ -211,14 +216,14 @@ class DeviceFragment : Fragment(), DeviceHandlerHook {
         _binding = null
     }
 
-    override fun userDevicesGetSucceed(devicesResponse: Map<String, Any>) {
+    override fun userDevicesGetSucceed(devicesResp: Map<String, Any>) {
         isLoadingDevices = false
         if (_binding == null) return
         activity?.runOnUiThread {
             binding.swipeRefreshLayout.isRefreshing = false
-            val deviceList = devicesResponse["content"] as? List<Map<String, Any>>
+            val deviceList = devicesResp["content"] as? List<Map<String, Any>>
 
-            val devices = deviceList?.mapNotNull { deviceMap ->
+            val devices = deviceList?.map { deviceMap ->
                 val productMap = deviceMap["product"] as? Map<String, Any>
                 val thingMap = deviceMap["thing"] as? Map<String, Any>
                 Device(
@@ -287,7 +292,7 @@ class DeviceFragment : Fragment(), DeviceHandlerHook {
         val shadow = event.json?.toMap()
         val reported = (shadow?.get("state") as? Map<*, *>)?.get("reported") as? Map<*, *>
         if (reported?.containsKey("status") == true) {
-            val newStatus = reported["status"]?.toString() ?: "Offline"
+            val newStatus = reported["status"]?.toString() ?: "Unknown"
             val updatedIndex = deviceAdapter.updateDeviceState(guid, newStatus, shadow)
             if (updatedIndex != -1) {
                 val viewHolder = binding.deviceRecyclerView.findViewHolderForAdapterPosition(updatedIndex) as? DeviceAdapter.DeviceViewHolder
@@ -304,7 +309,7 @@ class DeviceFragment : Fragment(), DeviceHandlerHook {
         val shadow = event.json?.toMap()
         val reported = (shadow?.get("state") as? Map<*, *>)?.get("reported") as? Map<*, *>
         if (reported?.containsKey("status") == true) {
-            val newStatus = reported["status"]?.toString() ?: "Offline"
+            val newStatus = reported["status"]?.toString() ?: "Unknown"
             val updatedIndex = deviceAdapter.updateDeviceState(guid, newStatus, shadow)
             if (updatedIndex != -1) {
                 val viewHolder = binding.deviceRecyclerView.findViewHolderForAdapterPosition(updatedIndex) as? DeviceAdapter.DeviceViewHolder
@@ -331,23 +336,21 @@ class DeviceFragment : Fragment(), DeviceHandlerHook {
         val idToken = AuthManager.authenticatedIdToken(context) ?: return
 
         event.urlToProductIds.forEach { (url, productIds) ->
-            val authConfig = event.urlToAuthConfig[url]
-            val useAuthz = authConfig?.get("customAuthz") as? Boolean ?: false
-            val authzUser = authConfig?.get("customAuthzUsername") as? String ?: ""
-
-            MqttClientService.startService(
-                context = context,
-                idToken = idToken,
-                mqttUrl = url,
-                customAuthz = useAuthz,
-                customAuthzUserName = authzUser
-            )
-
             if (isMqttServiceBound) {
+                val authConfig = event.urlToAuthConfig[url]
+                val useAuthz = authConfig?.get("customAuthz") as? Boolean ?: false
+                val authzUser = authConfig?.get("customAuthzUsername") as? String ?: ""
+                MqttClientService.startService(
+                    context = context,
+                    idToken = idToken,
+                    mqttUrl = url,
+                    customAuthz = useAuthz,
+                    customAuthzUserName = authzUser
+                )
                 val relevantSubTopics = event.subTopics.filter { topic -> productIds.any { pid -> topic.startsWith(pid) } }
                 val relevantPubTopics = event.pubTopics.filter { topic -> productIds.any { pid -> topic.startsWith(pid) } }
 
-                if (relevantSubTopics.isNotEmpty()) mqttService?.subscribeToTopics(url, relevantSubTopics)
+                relevantSubTopics.forEach { topic -> mqttService?.subscribe(url, topic) }
                 relevantPubTopics.forEach { topic -> mqttService?.publish(url, topic, "{}") }
             }
         }
@@ -356,8 +359,8 @@ class DeviceFragment : Fragment(), DeviceHandlerHook {
     private fun stopMqttService() {
         if (isMqttServiceBound) {
             requireContext().unbindService(serviceConnection)
-            isMqttServiceBound = false
             MqttClientService.stopService(requireContext())
+            isMqttServiceBound = false
         }
     }
 }
@@ -417,7 +420,8 @@ class DeviceAdapter(
             updateStatusIcon(device.status)
 
             progressBar.visibility = View.VISIBLE
-            Picasso.get().load(device.iconUrl).placeholder(R.drawable.placeholder_device_image).error(R.drawable.placeholder_device_image).into(deviceImage, object : Callback {
+            Picasso.get().load(device.iconUrl).placeholder(R.drawable.placeholder_device_image)
+                .error(R.drawable.placeholder_device_image).into(deviceImage, object : Callback {
                 override fun onSuccess() { progressBar.visibility = View.GONE }
                 override fun onError(e: Exception?) { progressBar.visibility = View.GONE }
             })
