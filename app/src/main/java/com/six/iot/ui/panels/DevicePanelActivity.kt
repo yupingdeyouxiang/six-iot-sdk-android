@@ -5,9 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
-import android.os.Handler
 import android.os.IBinder
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
@@ -40,6 +38,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
 import java.util.concurrent.ConcurrentLinkedQueue
+import kotlin.collections.get
 
 class DevicePanelActivity : AppCompatActivity() {
 
@@ -57,9 +56,9 @@ class DevicePanelActivity : AppCompatActivity() {
     // Properties for binding to the MqttClientService
     private var mqttService: MqttClientService? = null
     private var isMqttServiceBound = false
-    private val publishQueue = ConcurrentLinkedQueue<Pair<String, String>>()
 
-    private val handler = Handler(Looper.getMainLooper())
+    private val publishQueue = ConcurrentLinkedQueue<Pair<String, String>>()
+    private val subscribeQueue = ConcurrentLinkedQueue<String>()
 
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -73,9 +72,10 @@ class DevicePanelActivity : AppCompatActivity() {
                     "$productId/$deviceGuid/shadow/update/accepted",
                     "$productId/$deviceGuid/shadow/get/accepted"
                 )
-                mqttService?.subscribeToTopics(mqttUrl!!, topics)
+                topics.forEach { topic-> subscribe(topic) }
                 publish( "$productId/$deviceGuid/shadow/get", "{}")
             }
+            processSubscribeQueue()
             processPublishQueue()
         }
 
@@ -94,9 +94,10 @@ class DevicePanelActivity : AppCompatActivity() {
                     "$productId/$deviceGuid/shadow/update/accepted",
                     "$productId/$deviceGuid/shadow/get/accepted"
                 )
-                mqttService?.subscribeToTopics(mqttUrl!!, topics)
+                topics.forEach { topic -> subscribe(topic) }
                 publish( "$productId/$deviceGuid/shadow/get", "{}")
             }
+            processSubscribeQueue()
             processPublishQueue()
         }
     }
@@ -353,12 +354,32 @@ class DevicePanelActivity : AppCompatActivity() {
         }
     }
 
+    private fun subscribe(topic: String) {
+        if (isMqttServiceBound && mqttService != null) {
+            mqttService!!.subscribe(mqttUrl!!, topic)
+        } else {
+            Log.w(TAG, "Service not bound, queuing subscribe for topic: $topic")
+            subscribeQueue.add(topic)
+        }
+    }
+
     private fun processPublishQueue() {
         synchronized(publishQueue) {
             Log.d(TAG, "Processing ${publishQueue.size} queued publish requests.")
             while (publishQueue.isNotEmpty()) {
                 publishQueue.poll()?.let { (topic, payload) ->
                     publish(topic, payload) // Re-call publish to ensure service is now bound
+                }
+            }
+        }
+    }
+
+    private fun processSubscribeQueue() {
+        synchronized(subscribeQueue) {
+            Log.d(TAG, "Processing ${publishQueue.size} queued subscribe requests.")
+            while (subscribeQueue.isNotEmpty()) {
+                subscribeQueue.poll()?.let { topic ->
+                    subscribe(topic) // Re-call subcribe to ensure service is now bound
                 }
             }
         }
@@ -413,18 +434,19 @@ class DevicePanelActivity : AppCompatActivity() {
         if (event.deviceGuid == deviceGuid) {
             try {
                 val json = event.json
+
                 val stateObject = json?.optJSONObject("state")
                 val reportedObject = stateObject?.optJSONObject("reported")
 
-                val status = reportedObject?.optString("status")
+                val status = reportedObject?.optString("status") ?: "Unknown"
                 if (status.equals("Offline", ignoreCase = true)) {
-                    // Replace 'context' with your actual Context variable if this isn't in an Activity/Fragment
                     Toast.makeText(this@DevicePanelActivity, "Device is offline", Toast.LENGTH_SHORT).show()
                 }
 
                 val onValue = if (reportedObject?.optString("light") == "on") 1 else 0
                 val isOn = onValue == 1
                 channel.invokeMethod("updateLightState", mapOf("isOn" to isOn))
+
             } catch (e: Exception) {
                 Log.e(TAG, "Error parsing shadow data in onShadowRead", e)
             }
@@ -439,10 +461,8 @@ class DevicePanelActivity : AppCompatActivity() {
                 val stateObject = json?.optJSONObject("state")
                 val reportedObject = stateObject?.optJSONObject("reported")
 
-                // 1. Check if the device status is Offline and show a Toast
-                val status = reportedObject?.optString("status")
+                val status = reportedObject?.optString("status") ?: "Unknown"
                 if (status.equals("Offline", ignoreCase = true)) {
-                    // Replace 'context' with your actual Context variable if this isn't in an Activity/Fragment
                     Toast.makeText(this@DevicePanelActivity, "Device is offline", Toast.LENGTH_SHORT).show()
                 }
 
@@ -454,10 +474,6 @@ class DevicePanelActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 Log.e(TAG, "Error parsing shadow data in onShadowRead", e)
             }
-            /*handler.post({
-                publish( "$productId/$deviceGuid/shadow/get", "{}")
-                processPublishQueue()
-            })*/
         }
     }
 }

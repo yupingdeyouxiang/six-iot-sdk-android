@@ -4,8 +4,11 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Binder
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import com.six.iot.UserUtil
 import com.six.iot.events.MqttConnectedEvent
 import com.six.iot.events.MqttMessageArriveEvent
@@ -52,7 +55,7 @@ class MqttClientService : Service() {
     // Mapping URL to Client and its specific metadata
     private val clients = ConcurrentHashMap<String, MqttAndroidClient>()
     private val connectingStates = ConcurrentHashMap<String, AtomicBoolean>()
-    private val subscribedTopicsMap = ConcurrentHashMap<String, HashSet<String>>()
+    private val subscribedTopicsMap = ConcurrentHashMap<String, MutableSet<String>>()
     private val publishQueuesMap = ConcurrentHashMap<String, ConcurrentLinkedQueue<Pair<String, String>>>()
 
     private val binder = MqttBinder()
@@ -87,7 +90,6 @@ class MqttClientService : Service() {
                 //only connect the client for first time
                 connect(mqttUrl, idToken, customAuthz, customAuthzUserName)
                 Log.d(TAG, "New MqttAndroidClient created for URL: $mqttUrl")
-
             }
         }
 
@@ -104,7 +106,7 @@ class MqttClientService : Service() {
             override fun connectComplete(reconnect: Boolean, serverURI: String?) {
                 isConnecting.set(false)
                 Log.d(TAG, "Connected to $url. Reconnect: $reconnect")
-                subscribedTopicsMap[url]?.clear()
+                processSubscribeQueue(url)
                 processPublishQueue(url)
             }
 
@@ -140,6 +142,10 @@ class MqttClientService : Service() {
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
                     isConnecting.set(false)
                     Log.e(TAG, "Connection Failure: $url", exception)
+                    Handler(Looper.getMainLooper()).post {
+                        // NOTE: Replace 'context' with your actual Context reference
+                        Toast.makeText(this@MqttClientService, "Failed to connect to MQTT broker for: $url", Toast.LENGTH_SHORT).show()
+                    }
                 }
             })
         } catch (e: MqttException) {
@@ -192,7 +198,33 @@ class MqttClientService : Service() {
         }
     }
 
-    fun subscribeToTopics(url: String, topics: List<String>) {
+    fun subscribe(url: String, topic: String) {
+        val topicSet = subscribedTopicsMap.computeIfAbsent(url) { ConcurrentHashMap.newKeySet() }
+        topicSet.add(topic)
+
+        val client = clients[url]
+        if (client == null || !client.isConnected) {
+            Log.d(TAG, "Client offline. Cached topic for subscription later: $topic")
+            return
+        }
+
+        try {
+            client.subscribe(topic, 1)
+            Log.d(TAG, "Successfully subscribed to: $topic on $url")
+        } catch (e: MqttException) {
+            Log.e(TAG, "Subscribe failed for $topic on $url", e)
+        }
+    }
+
+    private fun processSubscribeQueue(url: String) {
+        val cachedTopics = subscribedTopicsMap[url] ?: return
+        // Iterate through all previously requested topics and subscribe to them on the new connection
+        for (topic in cachedTopics) {
+            subscribe(url, topic)
+        }
+    }
+
+    /*fun subscribeToTopics(url: String, topics: List<String>) {
         val client = clients[url] ?: return
         if (!client.isConnected) return
 
@@ -211,7 +243,7 @@ class MqttClientService : Service() {
         } catch (e: MqttException) {
             Log.e(TAG, "Subscribe error", e)
         }
-    }
+    }*/
 
     override fun onDestroy() {
         super.onDestroy()
